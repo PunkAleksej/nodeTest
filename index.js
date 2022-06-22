@@ -1,6 +1,6 @@
 import express from "express"
 import path from "path"
-import { requestTime, logger } from "./middlewares.js"
+import { registration, loginCheck } from "./middlewares.js"
 
 const PORT = 3000;
 
@@ -8,32 +8,34 @@ const app = express()
 
 const __dirname = path.resolve()
 
-app.use(express.static(path.resolve(__dirname, 'static')))
+app.use(express.static(__dirname + '/static'));
 
-
-app.use(requestTime)
-app.use(logger)
-
-app.get('/time', function(req, res) {
-    console.log(logger)
-    console.log()
+app.get('/', function(request, response) {
+    response.sendFile(path.resolve(__dirname, "static", "first.html"))
 })
 
 
+
+
+
+const urlencodedParser = express.urlencoded({extended: false});
+app.post("/", urlencodedParser, function (request, response) {
+    if(!request.body) return response.sendStatus(400);
+    loginCheck(request.body)
+    //console.log(request.body);
+    //response.send(`${request.body.userName} - ${request.body.userAge}`);
+});
+   
+app.post("/registration.html", urlencodedParser, function (request, response) {
+    if(!request.body) return response.sendStatus(400);
+    loginCheck(request.body)
+
+});
+
 // app.get('/', function(req, res) {
-//     // res.send(`<h1>Hello Express</h1>`)
 //     res.sendFile(path.resolve(__dirname, "static", "first.html"))
 // })
 
-
-// app.get('/second.html', function(req, res) {
-//     console.log(res.requestTime)
-//     res.sendFile(path.resolve(__dirname, "static", "second.html"))
-// })
-
-// app.get('/third', function(req, res) {
-//     res.sendFile(path.resolve(__dirname, "static", "third.html"))
-// })
 
 
 app.listen(PORT, () => {

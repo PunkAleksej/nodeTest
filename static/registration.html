@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>server registration</title>
+    <link rel="stylesheet" href="/server.css">
+</head>
+<body>
+    <div class="container">
+        <form action="http://localhost:3000/registration.html" method="post">
+            <h1>Registration</h1>
+            <input placeholder="Login" type="text" name="regLogin">
+            <input placeholder="Surname" type="text" name="regSurname">
+            <input placeholder="@mail" type="text" name="regMail">
+            <input placeholder="Password" type="text" name="regPassword">
+            <input placeholder="Repeat Password" type="text" name="regRepPassword">
+
+            <div>
+                <input type="checkbox" class="checkbox">
+                <label>I agree</label>
+            </div>
+        
+
+            <button>Send</button>
+
+            <a href="/" class="link">first page</a> 
+        </form>
+    </div>
+
+</body>
+</html>

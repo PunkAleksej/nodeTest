@@ -7,6 +7,22 @@ export function requestTime(req, res, next) {
 }
 
 export function logger(req, res, next) {
-  console.log(colors.bgGreen.black(`Time : ${req.requestTime}`))
+  const loginButton = document.querySelector(".loginButton");
+  loginButton.addEventListener("click", function (event) {
+    loginCheck()
+  })
   next()
+}
+
+export function registration(user) {
+  
+}
+
+
+export function loginCheck (user) {
+
+  console.log(user)
+
+
+
 }

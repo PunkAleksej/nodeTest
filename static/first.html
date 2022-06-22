@@ -4,12 +4,23 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Express App</title>
+    <title>My Awesome Server</title>
+    <link rel="stylesheet" href="/server.css">
 </head>
 <body>
-    <h1> First Page</h1>
-    <a href="/second.html">Go to 2 page</a>
-    <div></div>
-    <a href="/third.html">Go to 3 page</a>
+    <div class="container">
+        <form action="http://localhost:3000/" method="post">
+            <h1>My Awesome Server</h1>
+            <input placeholder="Login" type="text" name="loginInput">
+
+            <input placeholder="Password" type="text" name="passwordInput">
+            <input type="submit" value="Отправить" />
+            <button class="loginButton">Login</button>
+
+            <a href="/registration.html" class="link">Registration</a>
+        </form>
+
+    </div>
+
 </body>
 </html>
