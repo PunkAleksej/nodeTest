@@ -58,7 +58,7 @@ export function registration(user) {
     return('Wrong email')
   }
 
-  return ('Registered')
+  return user
 
 }
 
