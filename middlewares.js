@@ -1,4 +1,4 @@
-export function registration(user) {
+ function registration(user) {
   //console.log(user)
   const { regName, regSurname, regMail, 
   regPassword, regRepPassword } = user;
@@ -62,21 +62,16 @@ export function registration(user) {
 
 }
 
-// {
-//   regName: 'Alex',
-//   regSurname: 'Dudnikov',
-//   regMail: 'alekdudnikov@mail.ru',
-//   regPassword: '89185209977',
-//   regRepPassword: '89185209977'
-// }
 
 
-
-
-export function loginCheck (user) {
+ function loginCheck (user) {
 
   console.log(user)
 
 
 
+}
+module.exports = {
+  registration,
+  loginCheck
 }
