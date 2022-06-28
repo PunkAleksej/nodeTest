@@ -28,8 +28,17 @@ app.post("/",  (request, response) => {
 });
 
 
+
 app.post("/registration", async (request, response) => {
-    const {firstName, lastName, email, password, DoB} = request.body
+    
+    const status = registration(request.body)
+    if (typeof status == 'string') {
+        response.json({
+            status,
+        })
+    }
+    const { firstName, lastName, email, password, DoB}  = status
+
     try {
         const user = await db.User.create({
             firstName,
@@ -48,11 +57,11 @@ app.post("/registration", async (request, response) => {
 
 
 app.delete("/registration", async (request, response) => {
-    const {firstName, lastName, email, password} = request.body
+    const {firstName, lastName, email, password, id} = request.body
     try {
         const user = await db.User.destroy({
             where: {
-              firstName
+              id
             }
         })
         response.status(200).json({
@@ -80,14 +89,35 @@ app.get("/registration", async (request, response) => {
     }
 });
 
+
 app.put("/registration", async (request, response) => {
-    const {firstName, lastName, email, password} = request.body
+    const {firstName, lastName, email, password, id} = request.body
+    
+    let updateUserInfo = {};
+
+    if (password) {
+        updateUserInfo.password = password
+    }
+
+    if (email) {
+        updateUserInfo.email = email
+    }
+
+    if (firstName) {
+        updateUserInfo.firstName = firstName
+    }
+
+    if (lastName) {
+        updateUserInfo.lastName = lastName
+    }
+
     try {
-        const user = await db.User.update({
-            password: 1
-        }, {
+
+        const user = await db.User.update(
+            updateUserInfo
+        ,{
             where: {
-              firstName
+              id
             }
         })
         response.status(200).json({
@@ -99,17 +129,22 @@ app.put("/registration", async (request, response) => {
 });
 
 
+
+
+
+
+
     // try {
 
-    //     const status = registration(request.body)
-    //     if (typeof status !== 'string') {
-    //         console.log(status)
-    //         //addNewUser(status)
-    //     }
+        // const status = registration(request.body)
+        // if (typeof status !== 'string') {
+        //     console.log(status)
+        //     //addNewUser(status)
+        // }
 
-    //     response.json({
-    //         status,
-    //     })
+        // response.json({
+        //     status,
+        // })
 
 
 
@@ -193,3 +228,14 @@ app.put("/registration", async (request, response) => {
 app.listen(PORT, () => {
     console.log(`server start on port ${PORT}`)
 });
+
+
+
+
+
+
+
+
+
+
+
