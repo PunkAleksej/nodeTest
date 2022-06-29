@@ -1,133 +1,125 @@
-const { Router } = require("express");
 const express = require("express")
 const path = require("path")
-const { registration, loginCheck } = require("./middlewares.js")
-const db = require('./models')
-
-// import pg from 'pg';
-// import { addNewUser } from "./dataBase.js" 
+const authRouter = require('./router')
 
 const PORT = 4000;
 
 const app = express()
 
-// const __dirname = path.resolve()
-
 app.use(express.static(__dirname + '/static'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use('/', authRouter);
 
-app.get('/', (request, response) => {
-    // response.sendFile(path.resolve(__dirname, "static", "first.html"))
-    response.sendFile(`${__dirname}/static/first.html`)
-})
-
-app.post("/",  (request, response) => {
-    if (!request.body) return response.sendStatus(400);
-    loginCheck(request.body)
-
+app.listen(PORT, () => {
+    console.log(`server start on port ${PORT}`)
 });
 
 
 
-app.post("/registration", async (request, response) => {
+
+
+
+
+
+// app.post("/registration", async (request, response) => {
     
-    const status = registration(request.body)
-    if (typeof status == 'string') {
-        response.json({
-            status,
-        })
-    }
-    const { firstName, lastName, email, password, DoB}  = status
+//     const status = registration(request.body)
+//     if (typeof status == 'string') {
+//         response.json({
+//             status,
+//         })
+//     }
+//     const { firstName, lastName, email, password, DoB}  = status
 
-    try {
-        const user = await db.User.create({
-            firstName,
-            lastName,
-            email,
-            password,
-            DoB
-        })
-        response.status(200).json({
-            user
-        })
-    } catch(err) {
-        response.status(400).json({message: err.message})
-    }
-});    
-
-
-app.delete("/registration", async (request, response) => {
-    const {firstName, lastName, email, password, id} = request.body
-    try {
-        const user = await db.User.destroy({
-            where: {
-              id
-            }
-        })
-        response.status(200).json({
-            user
-        })
-    } catch(err) {
-        response.status(400).json({message: err.message})
-    }
-});
+//     try {
+//         const user = await db.User.create({
+//             firstName,
+//             lastName,
+//             email,
+//             password,
+//             DoB
+//         })
+//         response.status(200).json({
+//             user
+//         })
+//     } catch(err) {
+//         response.status(400).json({message: err.message})
+//     }
+// });    
 
 
-app.get("/registration", async (request, response) => {
-    const { firstName, lastName, email, password, id } = request.body
-    try {
-        const user = await db.User.findOne({
-            where: {
-              id
-            }
-        })
-        response.status(200).json({
-            user
-        })
-    } catch(err) {
-        response.status(400).json({message: err.message})
-    }
-});
+// app.delete("/registration", async (request, response) => {
+//     const {firstName, lastName, email, password, id} = request.body
+//     try {
+//         const user = await db.User.destroy({
+//             where: {
+//               id
+//             }
+//         })
+//         response.status(200).json({
+//             user
+//         })
+//     } catch(err) {
+//         response.status(400).json({message: err.message})
+//     }
+// });
 
 
-app.put("/registration", async (request, response) => {
-    const {firstName, lastName, email, password, id} = request.body
+// app.get("/registration", async (request, response) => {
+//     const { firstName, lastName, email, password, id } = request.body
+//     try {
+//         const user = await db.User.findOne({
+//             where: {
+//               id
+//             }
+//         })
+//         response.status(200).json({
+//             user
+//         })
+//     } catch(err) {
+//         response.status(400).json({message: err.message})
+//     }
+// });
+
+
+// app.put("/registration", async (request, response) => {
+//     const {firstName, lastName, email, password, id} = request.body
     
-    let updateUserInfo = {};
+//     let updateUserInfo = {};
 
-    if (password) {
-        updateUserInfo.password = password
-    }
+//     if (password) {
+//         updateUserInfo.password = password
+//     }
 
-    if (email) {
-        updateUserInfo.email = email
-    }
+//     if (email) {
+//         updateUserInfo.email = email
+//     }
 
-    if (firstName) {
-        updateUserInfo.firstName = firstName
-    }
+//     if (firstName) {
+//         updateUserInfo.firstName = firstName
+//     }
 
-    if (lastName) {
-        updateUserInfo.lastName = lastName
-    }
+//     if (lastName) {
+//         updateUserInfo.lastName = lastName
+//     }
 
-    try {
+//     try {
 
-        const user = await db.User.update(
-            updateUserInfo
-        ,{
-            where: {
-              id
-            }
-        })
-        response.status(200).json({
-            user
-        })
-    } catch(err) {
-        response.status(400).json({message: err.message})
-    }
-});
+//         const user = await db.User.update(
+//             updateUserInfo
+//         ,{
+//             where: {
+//               id
+//             }
+//         })
+//         response.status(200).json({
+//             user
+//         })
+//     } catch(err) {
+//         response.status(400).json({message: err.message})
+//     }
+// });
 
 
 
@@ -224,11 +216,6 @@ app.put("/registration", async (request, response) => {
 // app.get('/', function(req, res) {
 //     res.sendFile(path.resolve(__dirname, "static", "first.html"))
 // })
-
-
-app.listen(PORT, () => {
-    console.log(`server start on port ${PORT}`)
-});
 
 
 
