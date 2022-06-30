@@ -1,33 +1,59 @@
 const Router = require('express');
+const { validationResult, check, checkSchema} = require("express-validator/check")
 const router = new Router();
+
 const regController = require('./controllers/regController');
 const loginController = require('./controllers/loginController');
-const {validationResult, check} = require("express-validator/check")
+const regMiddlaware = require('./middlewares/regMiddleware');
+const {registrationSchema} = require('./middlewares/regMiddleware');
 
 
-router.post("/registration",[
-  check('firstName', "Имя пользователя не может быть пустым").notEmpty(),
-  check('lastName', "Фамилия пользователя не может быть пустой").notEmpty(),
-  check('email', "Email пользователя не может быть пустым").notEmpty(),
-  check('DoB', "Дата рождения пользователя не может быть пустой").notEmpty(),
-  check('password', "Пароль должен быть меньше 8 и больше 20 символов").isLength({min:8, max:20})], 
-  (request, response) => {
-    const errors = validationResult(request);
-    if (!errors.isEmpty()) {
-      return response.status(422).jsonp(errors.array());
-    }
-  regController.registration(request, response)
-  }
-);
-  
 
 
-router.delete("/registration", regController.deleteUser);
+router.post("/registration", checkSchema(registrationSchema) ,regController.registration);
 
-router.get("/registration",regController.getUser);
+// router.post("/registration", [
+//   check('firstName', "Имя пользователя не может быть пустым").notEmpty(),
+//   check('lastName', "Фамилия пользователя не может быть пустой").notEmpty(),
+//   check('email', "Email пользователя не может быть пустым").notEmpty(),
+//   check('DoB', "Дата рождения пользователя не может быть пустой").notEmpty(),
+//   check('password', "Пароль должен быть меньше 8 и больше 20 символов").isLength({ min: 8, max: 20 })
+//   ],
+//   (request, response) => {
+//     const errors = validationResult(request);
+//     if (!errors.isEmpty()) {
+//       return response.status(422).jsonp(errors.array());
+//     }
+//     regController.registration(request, response)
+//   }
+// );
 
-router.put("/registration", regController.updateUserInfo);
+router.delete("/delete", regController.deleteUser);
+
+router.get("/get", regController.getUser);
+
+router.put("/update", regController.updateUserInfo);
 
 router.post('/login', loginController.login);
 
+router.post('/testLogin', loginController.testLogin);
+
 module.exports = router;
+
+
+
+// router.post("/registration", [
+//   check('firstName', "Имя пользователя не может быть пустым").notEmpty(),
+//   check('lastName', "Фамилия пользователя не может быть пустой").notEmpty(),
+//   check('email', "Email пользователя не может быть пустым").notEmpty(),
+//   check('DoB', "Дата рождения пользователя не может быть пустой").notEmpty(),
+//   check('password', "Пароль должен быть меньше 8 и больше 20 символов").isLength({ min: 8, max: 20 })
+// ],
+//   (request, response) => {
+//     const errors = validationResult(request);
+//     if (!errors.isEmpty()) {
+//       return response.status(422).jsonp(errors.array());
+//     }
+//     regController.registration(request, response)
+//   }
+// );

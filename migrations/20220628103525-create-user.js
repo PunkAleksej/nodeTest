@@ -10,11 +10,11 @@ module.exports = {
       },
       firstName: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       lastName: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       email: {
         type: Sequelize.STRING,
@@ -30,7 +30,7 @@ module.exports = {
       },
       DoB: {
         type: Sequelize.DATE,
-        allowNull: false
+        allowNull: true
       },
       createdAt: {
         allowNull: false,
