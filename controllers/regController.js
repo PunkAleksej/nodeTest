@@ -1,6 +1,9 @@
 const db = require('../models')
 const hasher = require('../passHasher.js');
 const { validationResult } = require("express-validator/check")
+const jwt = require('jsonwebtoken');
+
+
 
 class authController {
     async registration(request, response) {
@@ -28,16 +31,24 @@ class authController {
     };
 
     async deleteUser(request, response) {
-        const { id } = request.body
         try {
+            const token = request.headers.authorization;
+            if (!token) {
+              response.status(400).json({message: "user not auth"})
+            }
+        
+            const profileData = jwt.verify(token, 'SECRET_KEY')
+            if (!profileData) {
+              response.sendStatus(403);
+            }
+        
+            const id = profileData.id
             const user = await db.User.destroy({
-                where: {
-                    id
-                }
+              where : {
+                  id
+              }
             })
-            response.status(200).json({
-                user
-            })
+            response.status(200).json(user)
         } catch (err) {
             response.status(400).json({ message: 'error' })
         }
@@ -60,8 +71,20 @@ class authController {
     };
 
     async updateUserInfo(request, response) {
-        const { firstName, lastName, email, password, id } = request.body
+        const token = request.headers.authorization;
+        if (!token) {
+          response.status(400).json({message: "user not auth"})
+        }
+    
+        const profileData = jwt.verify(token, 'SECRET_KEY')
+        if (!profileData) {
+          response.sendStatus(403);
+        }
+    
+        const id = profileData.id
 
+        const { firstName, lastName, email, password } = request.body
+        console.log(email, id)
         let updateUserInfo = {};
 
         if (password) {
@@ -102,53 +125,3 @@ class authController {
 }
 
 module.exports = new authController()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// class authController {
-//   async registration (request, response) {
-//     try {
-
-//       const {firtstName, lastName, email, password} = request.body;
-
-//       const candidate = await User.findOne({email})
-//       if (candidate) {
-//         return response.status(400).json({message: "the user already exists"})
-//       }
-
-//       const user = new User({
-//         firtstName,
-//         lastName,
-//         email,
-//         password: hasher(password)
-//       })
-
-//     } catch (error) {
-//       response.status(400).json({message: 'Registration error'})
-//     }
-//   }
-
-//   async  () {
-
-//   }
-
-//   async getUsers()
-// }
-
-
-// module.exports = new authController()
